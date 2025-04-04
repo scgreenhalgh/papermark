@@ -19,7 +19,8 @@ import { handleDomainUpdates } from "./utils";
  **/
 // Runs once per day at 12pm (0 12 * * *)
 
-export const maxDuration = 300; // 5 minutes in seconds
+// export const maxDuration = 300; // 5 minutes in seconds too long for hobby plan
+export const maxDuration = 60; // 60 seconds max duration for hobby plan
 
 export async function POST(req: Request) {
   const body = await req.json();
