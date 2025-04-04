@@ -2,8 +2,8 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL as string,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN as string,
+  url: process.env.UPSTASH_REDIS_KV_REST_API_URL as string,
+  token: process.env.UPSTASH_REDIS_KV_REST_API_TOKEN as string,
 });
 
 export const lockerRedisClient = new Redis({
