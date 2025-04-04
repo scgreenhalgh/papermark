@@ -16,9 +16,9 @@ import { generateChecksum } from "@/lib/utils/generate-checksum";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
-// This function can run for a maximum of 180 seconds
+// This function can run for a maximum of 60 seconds
 export const config = {
-  maxDuration: 180,
+  maxDuration: 60,
 };
 
 export const authOptions: NextAuthOptions = {
