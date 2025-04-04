@@ -62,3 +62,7 @@ lib/emails/marketing
 
 # changelog
 changelog
+
+#pyenv
+.pyenv
+.python-version
