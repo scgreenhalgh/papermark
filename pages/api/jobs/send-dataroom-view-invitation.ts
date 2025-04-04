@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { log } from "@/lib/utils";
 
 export const config = {
-  maxDuration: 120,
+  maxDuration: 60,
 };
 
 export default async function handle(
