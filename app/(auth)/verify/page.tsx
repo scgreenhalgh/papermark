@@ -21,10 +21,18 @@ export default function VerifyPage({
   const isValidVerificationUrl = (url: string, checksum: string): boolean => {
     try {
       const urlObj = new URL(url);
-      if (urlObj.origin !== process.env.NEXTAUTH_URL) return false;
+      console.log("Verification URL origin:", urlObj.origin);
+      console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
+      if (urlObj.origin !== process.env.NEXTAUTH_URL) {
+        console.log("URL origin mismatch");
+        return false;
+      }
       const expectedChecksum = generateChecksum(url);
+      console.log("Expected checksum:", expectedChecksum);
+      console.log("Provided checksum:", checksum);
       return checksum === expectedChecksum;
-    } catch {
+    } catch (e) {
+      console.error("Error validating verification URL:", e);
       return false;
     }
   };
