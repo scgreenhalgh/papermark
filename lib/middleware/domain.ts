@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { BLOCKED_PATHNAMES } from "@/lib/constants";
-import { getToken } from "next-auth/jwt";
 
 export default async function DomainMiddleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const host = req.headers.get("host");
 
-  // Get the authentication token
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  // If it's the root path, redirect to papermark.com/home
+  if (path === "/") {
+    if (host === "guide.permithealth.com") {
+      return NextResponse.redirect(
+        new URL("https://guide.permithealth.com/faq", req.url),
+      );
+    }
 
-  // If it's the root path and user is not authenticated, redirect to login
-  if (path === "/" && !token?.email) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(
+      new URL("https://www.papermark.com/home", req.url),
+    );
   }
 
   const url = req.nextUrl.clone();
