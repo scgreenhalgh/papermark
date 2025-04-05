@@ -4,7 +4,7 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-// Create a new PrismaClient instance with connection pooling configuration
+// Create a new PrismaClient instance with specific settings for NextAuth
 const prisma = global.prisma || new PrismaClient({
   log: ['error', 'warn'],
   datasources: {
@@ -36,7 +36,11 @@ prisma.$extends({
           const result = await query(args);
           // Clean up prepared statements after each query in production/preview
           if (process.env.NODE_ENV !== 'development') {
-            await prisma.$queryRaw`DEALLOCATE ALL`;
+            try {
+              await prisma.$queryRaw`DEALLOCATE ALL`;
+            } catch (e) {
+              // Ignore errors from DEALLOCATE
+            }
           }
           return result;
         } catch (error) {
@@ -45,8 +49,12 @@ prisma.$extends({
               retries < maxRetries) {
             retries++;
             await new Promise(resolve => setTimeout(resolve, 100 * retries));
-            await prisma.$disconnect();
-            await prisma.$connect();
+            try {
+              await prisma.$disconnect();
+              await prisma.$connect();
+            } catch (e) {
+              // Ignore connection errors during retry
+            }
             continue;
           }
           throw error;
@@ -54,6 +62,16 @@ prisma.$extends({
       }
     }
   }
+});
+
+// Create a separate instance for NextAuth
+export const nextAuthPrisma = new PrismaClient({
+  log: ['error'],
+  datasources: {
+    db: {
+      url: process.env.POSTGRES_PRISMA_URL,
+    },
+  },
 });
 
 export default prisma;
