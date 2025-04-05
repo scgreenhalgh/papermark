@@ -8,7 +8,7 @@ const prisma = global.prisma || new PrismaClient({
   log: ['query', 'error', 'warn'],
   datasources: {
     db: {
-      url: process.env.POSTGRES_PRISMA_URL + "&connection_limit=5"
+      url: process.env.POSTGRES_PRISMA_URL + "&connection_limit=5&pgbouncer=true&statement_cache_size=0"
     }
   }
 });
