@@ -6,7 +6,7 @@ import { log } from "@/lib/utils";
 import { generateUnsubscribeUrl } from "@/lib/utils/unsubscribe";
 
 export const config = {
-  maxDuration: 120,
+  maxDuration: 60,
 };
 
 export default async function handle(
