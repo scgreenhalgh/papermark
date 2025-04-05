@@ -7,7 +7,7 @@ import { getLambdaClient } from "@/lib/files/aws-client";
 import prisma from "@/lib/prisma";
 
 export const config = {
-  maxDuration: 180,
+  maxDuration: 60,
   memory: 2048,
 };
 

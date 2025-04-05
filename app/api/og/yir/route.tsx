@@ -4,19 +4,9 @@ import { NextRequest } from "next/server";
 export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
-  const inter = await fetch(
-    new URL("@/styles/Inter-Regular.ttf", import.meta.url),
-  ).then((res) => res.arrayBuffer());
-
-  const interBold = await fetch(
-    new URL("@/public/_static/Inter-Bold.ttf", import.meta.url),
-  ).then((res) => res.arrayBuffer());
-
   const year = req.nextUrl.searchParams.get("year") || "2024";
-  const minutesSpentOnDocs =
-    req.nextUrl.searchParams.get("minutesSpentOnDocs") || "1000";
-  const uploadedDocuments =
-    req.nextUrl.searchParams.get("uploadedDocuments") || "100";
+  const minutesSpentOnDocs = req.nextUrl.searchParams.get("minutesSpentOnDocs") || "1000";
+  const uploadedDocuments = req.nextUrl.searchParams.get("uploadedDocuments") || "100";
   const sharedLinks = req.nextUrl.searchParams.get("sharedLinks") || "10";
   const receivedViews = req.nextUrl.searchParams.get("receivedViews") || "1000";
 
@@ -24,7 +14,7 @@ export async function GET(req: NextRequest) {
     (
       <div
         tw="flex bg-black w-full h-full items-center justify-between"
-        style={{ padding: "48px" }}
+        style={{ padding: "48px", fontFamily: '"Inter"' }}
       >
         {/* Left Side Text */}
         <div tw="flex flex-col text-white" style={{ marginLeft: "48px" }}>
@@ -83,16 +73,20 @@ export async function GET(req: NextRequest) {
       },
       fonts: [
         {
-          name: "Inter",
-          data: inter,
+          name: 'Inter',
+          data: await fetch(
+            'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2'
+          ).then((res) => res.arrayBuffer()),
           weight: 400,
-          style: "normal",
+          style: 'normal',
         },
         {
-          name: "Inter",
-          data: interBold,
+          name: 'Inter',
+          data: await fetch(
+            'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2'
+          ).then((res) => res.arrayBuffer()),
           weight: 700,
-          style: "normal",
+          style: 'normal',
         },
       ],
     },
