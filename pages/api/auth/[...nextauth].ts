@@ -16,6 +16,9 @@ import { generateChecksum } from "@/lib/utils/generate-checksum";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
+// List of allowed domains
+const ALLOWED_DOMAINS = ["angelflow.vc"]; // Add more domains here as needed
+
 // This function can run for a maximum of 60 seconds
 export const config = {
   maxDuration: 60,
@@ -30,6 +33,11 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          hd: ALLOWED_DOMAINS.join("|"), // Google OAuth supports multiple domains with pipe separator
+        },
+      },
     }),
     LinkedInProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID as string,
@@ -133,6 +141,16 @@ export const authOptions: NextAuthOptions = {
         ...(token || session).user,
       };
       return session;
+    },
+    signIn: async ({ account, profile }) => {
+      if (account?.provider === "google") {
+        // Double check the email domain in case the hd parameter is bypassed
+        const email = profile?.email;
+        if (!email || !ALLOWED_DOMAINS.some(domain => email.endsWith(`@${domain}`))) {
+          return false;
+        }
+      }
+      return true;
     },
   },
   events: {

@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { validateEmail } from "@/lib/utils/validate-email";
 
+const ALLOWED_DOMAINS = ["angelflow.vc"]; // Add more domains here as needed
+
 export default function Login() {
   const { next } = useParams as { next?: string };
 
@@ -35,15 +37,30 @@ export default function Login() {
     "Continue with Email",
   );
 
-  // const isValidEmail = email.length > 0 && validateEmail(email);
   const emailSchema = z
     .string()
     .trim()
     .toLowerCase()
     .min(3, { message: "Please enter a valid email." })
-    .email({ message: "Please enter a valid email." });
+    .email({ message: "Please enter a valid email." })
+    .refine((email) => ALLOWED_DOMAINS.some(domain => email.endsWith(`@${domain}`)), {
+      message: `Only emails from the following domains are allowed: ${ALLOWED_DOMAINS.join(", ")}`,
+    });
 
   const emailValidation = emailSchema.safeParse(email);
+
+  const handleGoogleSignIn = () => {
+    // We'll handle the domain restriction in the Google OAuth callback
+    setClickedMethod("google");
+    setLastUsed("google");
+    signIn("google", {
+      ...(next && next.length > 0 ? { callbackUrl: next } : {}),
+    }).then((res) => {
+      if (res?.status) {
+        setClickedMethod(undefined);
+      }
+    });
+  };
 
   return (
     <div className="flex h-screen w-full flex-wrap">
@@ -63,6 +80,9 @@ export default function Login() {
             <h3 className="text-balance text-sm text-gray-800">
               Share documents. Not attachments.
             </h3>
+            <p className="text-balance text-xs text-gray-500">
+              Only emails from the following domains are allowed: {ALLOWED_DOMAINS.join(", ")}
+            </p>
           </div>
           <form
             className="flex flex-col gap-4 px-4 pt-8 sm:px-16"
@@ -97,13 +117,12 @@ export default function Login() {
             </Label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder={`name@${ALLOWED_DOMAINS[0]}`}
               type="email"
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
               disabled={clickedMethod === "email"}
-              // pattern={patternSimpleEmailRegex}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={cn(
@@ -134,17 +153,7 @@ export default function Login() {
           <div className="flex flex-col space-y-2 px-4 sm:px-16">
             <div className="relative">
               <Button
-                onClick={() => {
-                  setClickedMethod("google");
-                  setLastUsed("google");
-                  signIn("google", {
-                    ...(next && next.length > 0 ? { callbackUrl: next } : {}),
-                  }).then((res) => {
-                    if (res?.status) {
-                      setClickedMethod(undefined);
-                    }
-                  });
-                }}
+                onClick={handleGoogleSignIn}
                 loading={clickedMethod === "google"}
                 disabled={clickedMethod && clickedMethod !== "google"}
                 className="flex w-full items-center justify-center space-x-2 border border-gray-200 bg-gray-100 font-normal text-gray-900 hover:bg-gray-200"
