@@ -12,8 +12,8 @@ import { z } from "zod";
 
 import { LastUsed, useLastUsed } from "@/components/hooks/useLastUsed";
 import Google from "@/components/shared/icons/google";
-import LinkedIn from "@/components/shared/icons/linkedin";
-import Passkey from "@/components/shared/icons/passkey";
+// import LinkedIn from "@/components/shared/icons/linkedin";
+// import Passkey from "@/components/shared/icons/passkey";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +25,7 @@ export default function Login() {
   const { next } = useParams as { next?: string };
 
   const [lastUsed, setLastUsed] = useLastUsed();
-  const authMethods = ["google", "email", "linkedin", "passkey"] as const;
+  const authMethods = ["google", "email"] as const;
   type AuthMethod = (typeof authMethods)[number];
   const [clickedMethod, setClickedMethod] = useState<AuthMethod | undefined>(
     undefined,
@@ -156,6 +156,7 @@ export default function Login() {
                 )}
               </Button>
             </div>
+            {/* LinkedIn authentication button - commented out
             <div className="relative">
               <Button
                 onClick={() => {
@@ -180,6 +181,8 @@ export default function Login() {
                 )}
               </Button>
             </div>
+            */}
+            {/* Passkey authentication button - commented out
             <div className="relative">
               <Button
                 onClick={() => {
@@ -199,6 +202,7 @@ export default function Login() {
                 {lastUsed === "passkey" && <LastUsed />}
               </Button>
             </div>
+            */}
           </div>
           <p className="mt-10 w-full max-w-md px-4 text-xs text-muted-foreground sm:px-16">
             By clicking continue, you acknowledge that you have read and agree
