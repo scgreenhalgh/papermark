@@ -7,9 +7,9 @@ import { putFileServer } from "@/lib/files/put-file-server";
 import prisma from "@/lib/prisma";
 import { log } from "@/lib/utils";
 
-// This function can run for a maximum of 60 seconds
+// This function can run for a maximum of 120 seconds
 export const config = {
-  maxDuration: 60,
+  maxDuration: 180,
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
