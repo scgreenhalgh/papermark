@@ -5,8 +5,7 @@ import { log } from "@/lib/utils";
 import { processEmailQueue } from "@/lib/year-in-review/send-emails";
 
 // Runs every hour (0 * * * *)
-// export const maxDuration = 300; // 5 minutes in seconds too long for hobby plan
-export const maxDuration = 60; // 60 seconds max duration for hobby plan
+export const maxDuration = 300; // 5 minutes in seconds
 
 export async function POST(req: Request) {
   const body = await req.json();

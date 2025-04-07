@@ -19,9 +19,9 @@ const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 // List of allowed domains
 const ALLOWED_DOMAINS = ["angelflow.vc"]; // Add more domains here as needed
 
-// This function can run for a maximum of 60 seconds
+// This function can run for a maximum of 180 seconds
 export const config = {
-  maxDuration: 60,
+  maxDuration: 180,
 };
 
 export const authOptions: NextAuthOptions = {
